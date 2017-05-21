@@ -1,0 +1,126 @@
+{% load staticfiles %}
+{% load static %}
+
+<html>
+<body>
+
+
+<title>{% block head_title %}Nihongo-App{% endblock head_title %}</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<link rel='stylesheet' href='{% static "css/base_res.css" %}'/>
+
+<style>
+    {% block style %}
+    {% endblock style %}
+</style>
+<div class="container">
+    <!--<div class="col-lg-8 col-sm-offset-2">-->
+
+        {% block content %}{% endblock content%}
+    <!--</div>-->
+</div>
+
+<script
+        src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+    	// add button style
+		$("[name='poll_bar'").addClass("btn btn-default");
+		// Add button style with alignment to left with margin.
+		$("[name='poll_bar'").css({"text-align":"center","margin":"1px"});
+
+		//loop
+		$("[name='poll_bar'").each(
+				function(i){
+				  //get poll value
+					var bar_width = (parseFloat($("[name='poll_val'").eq(i).text())/2).toString();
+					bar_width = bar_width + "%"; //add percentage sign.
+					//set bar button width as per poll value mention in span.
+					$("[name='poll_bar'").eq(i).width(bar_width);
+
+					//Define rules.
+					var bar_width_rule = parseFloat($("[name='poll_val'").eq(i).text());
+					if(bar_width_rule == 100){$("[name='poll_bar'").eq(i).addClass("btn btn-sm btn-success")}
+					if(bar_width_rule >=  80 && bar_width_rule < 100){$("[name='poll_bar'").eq(i).addClass("btn btn-sm btn-info")}
+					if(bar_width_rule <= 5){$("[name='poll_bar'").eq(i).addClass("btn btn-sm btn-danger")}
+					if(bar_width_rule >= 20 && bar_width_rule <  80){$("[name='poll_bar'").eq(i).addClass("btn btn-sm btn-warning")}
+
+				});
+});
+
+$(document).ready(function () {
+    //Wizard
+    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+
+        var $target = $(e.target);
+
+        if ($target.parent().hasClass('disabled')) {
+            return false;
+        }
+        if ($target.hasClass('active')) {
+            return false;
+        }
+    });
+
+    $(".next-step").click(function (e) {
+
+        var $active = $('.wizard .nav-tabs li.active');
+        $active.next().removeClass('disabled');
+        $active.addClass('disabled');
+        nextTab($active);
+
+    });
+});
+
+function nextTab(elem) {
+    $(elem).next().find('a[data-toggle="tab"]').click();
+}
+
+//according menu
+
+$(document).ready(function()
+{
+    //Add Inactive Class To All Accordion Headers
+    $('.accordion-header').toggleClass('inactive-header');
+
+	//Set The Accordion Content Width
+	var contentwidth = $('.accordion-header').width();
+	$('.accordion-content').css({});
+
+	//Open The First Accordion Section When Page Loads
+	$('.accordion-header').first().toggleClass('active-header').toggleClass('inactive-header');
+	$('.accordion-content').first().slideDown().toggleClass('open-content');
+
+	// The Accordion Effect
+	$('.accordion-header').click(function () {
+		if($(this).is('.inactive-header')) {
+			$('.active-header').toggleClass('active-header').toggleClass('inactive-header').next().slideToggle().toggleClass('open-content');
+			$(this).toggleClass('active-header').toggleClass('inactive-header');
+			$(this).next().slideToggle().toggleClass('open-content');
+		}
+
+		else {
+			$(this).toggleClass('active-header').toggleClass('inactive-header');
+			$(this).next().slideToggle().toggleClass('open-content');
+		}
+	});
+
+	return false;
+});
+
+</script>
+</body>
+</html>

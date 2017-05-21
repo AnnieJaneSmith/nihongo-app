@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block post_detail_link %}
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Выбрать раздел<span class="caret"></span></a>
+<ul class="dropdown-menu">
+    {% for object in main_list %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title}}</a></li>
+    <li role="separator" class="divider"></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block user_stat_link %}
+{% if request.user.is_authenticated and not request.user.is_superuser %}
+<li><a href='{% url "blog:profile" %}'>Профиль / Статистика</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+{% block functions_link %}
+{% if request.user.is_authenticated and request.user.is_superuser %}
+<li><a href="{{ instance.get_absolute_url }}edit/">Редактировать раздел</a></li>
+<li><a href="{{ instance.get_absolute_url }}delete/">Удалить</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div align="left"><h1><img src='{{ instance.image.url }}'
+        border="0" heght="100" width="100"></a> {{ title }}</h1></div>
+
+
+    {% for object in object_list %}
+    <div class="column">
+        <div class="col-lg-6">
+            <div class="thumbnail">
+                <h3 align="center">
+                    <a href='{{ object.get_absolute_url }}'>
+                        {{ object.title }}</a></h3></h3>
+                        {% if object.image and not object.content %}
+                        <img src='{{ object.image.url }}' class='img-responsive'/>
+                        {% endif %}
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+{% endblock content %}

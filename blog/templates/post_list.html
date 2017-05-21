@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block user_stat_link %}
+{% if request.user.is_authenticated and not request.user.is_superuser %}
+<li><a href='{% url "blog:profile" %}'>Профиль / Статистика</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+{% block functions_link %}
+    {% if request.user.is_authenticated and request.user.is_superuser %}
+    <li><a href='{% url "logout" %}'>Выйти</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div align="left"><h1><a href='{% url "blog:list" %}'><img src="http://127.0.0.1:8000/media_cdn/images/logo.png"
+        border="0" heght="100" width="100"></a> Nihongo-App</h1></div>
+
+<div class='col-lg-10 col-sm-offset-1'>
+<form method='GET' action=''>
+    <div class="input-group">
+        <input class="form-control" type='text' name='query' placeholder='Искать тему для изучения' value='{{ request.get.query }}'/>
+        <span class="input-group-btn">
+            <input class='btn btn-default' type='submit' value='Поиск'/>
+        </span>
+
+    </div>
+</div>
+
+</form>
+
+{% for object in object_list %}
+<div class="column">
+  <div class="col-lg-4">
+    <div class="thumbnail">
+        <h3 align="center">
+            <a href='{{ object.get_absolute_url }}'>
+                {{ object.title }}</a></h3>
+        {% if object.image %}
+        <a href='{{ object.get_absolute_url }}'>
+            <img src='{{ object.image.url }}' class='img-responsive' alt="{{ object.title }}"/></a>
+        {% endif %}
+        <div class="caption">
+        <p align="center"><a href="{{ object.get_absolute_url }}" class="btn btn-primary" role="button">Перейти к разделу</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<!--<div class="pagination">-->
+    <!--<span class="step-links">-->
+        <!--{% if object_list.has_previous %}-->
+            <!--<a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">previous</a>-->
+        <!--{% endif %}-->
+
+        <!--<span class="current">-->
+            <!--Страница {{ object_list.number }} из {{ object_list.paginator.num_pages }}.-->
+        <!--</span>-->
+
+        <!--{% if object_list.has_next %}-->
+            <!--<a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">next</a>-->
+        <!--{% endif %}-->
+    <!--</span>-->
+<!--</div>-->
+
+
+</div>
+{% endblock content%}

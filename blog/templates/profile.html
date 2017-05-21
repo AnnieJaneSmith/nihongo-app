@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block user_stat_link %}
+{% if request.user.is_authenticated and not request.user.is_superuser %}
+<li><a href='#'>Профиль пользователя</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div align="left"><h3><a href='{% url "blog:list" %}'><img src="http://127.0.0.1:8000/media_cdn/images/logo.png"
+                                                           border="0" heght="100" width="100"></a> Nihongo-App</h1>
+</div>
+
+
+<div class="column">
+    <div class="col-sm-5">
+        <table class="table">
+            <tr>
+                <td>Логин:</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td>E-mail:</td>
+                <td>{{ user.email }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="panel panel-info">
+        <div class="panel-heading">Статистика</div>
+
+        <table class="table">
+            <tr>
+                <th style="width: 20%;">Тема</th>
+                <th style="width: 40%;">Выполнено</th>
+                <th style="width: 40%;">Выполнено успешно</th>
+            </tr>
+            {% for object in to_table %}
+            <tr>
+                <td>
+                    {{ object.theme }}
+                </td>
+                <td>
+                    <div id="Main">
+                        <div class="progress-bar-striped" name="poll_bar"><span
+                                name="poll_val"> {{ object.pr_all }}% </span>
+                        </div>
+
+                    </div>
+                </td>
+                <td>
+                    <div id="Main">
+                        <div class="progress-bar-striped" name="poll_bar"><span
+                                name="poll_val"> {{ object.pr_good }}% </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock content%}

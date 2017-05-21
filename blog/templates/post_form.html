@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
+
+{% block content %}
+
+    {% if request.user.is_authenticated and request.user.is_superuser %}
+    <ul class="nav nav-tabs">
+    <li><a href='{% url "blog:list" %}'>Старт</a></li>
+    <li class="active"><a href="/blog/create/">Редактирование раздела</a></li>
+    <li class='pull-right'><a href='{% url "logout" %}'>Выйти</a></li>
+    </ul>
+    {% endif %}
+
+<div class="col-sm-6 col-sm-offset-3">
+    <h1>Работа над разделом</h1>
+    <form method="POST" action="" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class='btn btn-default'
+               value="Сохранить изменения" />
+    </form>
+</div>
+{% endblock content %}

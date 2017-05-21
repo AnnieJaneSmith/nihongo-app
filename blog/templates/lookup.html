@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+Материал по теме | {{ block.super }}
+{% endblock head_title %}
+
+
+{% block post_detail_link %}
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Выбрать раздел<span class="caret"></span></a>
+<ul class="dropdown-menu">
+    {% for object in main %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title}}</a></li>
+    <li role="separator" class="divider"></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block unit_detail_link %}
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Выбрать подраздел<span class="caret"></span></a>
+<ul class="dropdown-menu">
+    {% for object in previous %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title}}</a></li>
+    <li role="separator" class="divider"></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+{% block theme_detail_link %}
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Выбрать тему<span class="caret"></span></a>
+<ul class="dropdown-menu">
+    {% for object in theme_list %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.theme_title}}</a></li>
+    <li role="separator" class="divider"></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block functions_link %}
+{% if request.user.is_authenticated and request.user.is_superuser %}
+<li><a href="">Редактировать тему</a></li>
+<li><a href="">Удалить тему</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+{% block user_stat_link %}
+{% if request.user.is_authenticated and not request.user.is_superuser %}
+<li><a href='{% url "blog:profile" %}'>Профиль / Статистика</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+
+
+
+{% block content %}
+
+<div align="left">
+    <h1><a href='{% url "blog:list" %}'>
+        <img src="http://127.0.0.1:8000/media_cdn/images/logo.png"
+             border="0" heght="100" width="100"></a>
+        Материал по теме {% if object_list %}<small>
+            {{ object_list.number }} из {{ object_list.paginator.num_pages }}
+        </small>
+        {% endif %}</h1>
+    {% if not object_list %}
+    По этой теме пока нет материалов.
+    {% endif %}</br></br>
+</div>
+
+
+{% for object in object_list %}
+
+<div class="column">
+    <div class="col-lg-3">
+        <h3 align="center">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if not object_list.has_previous %}
+                    <a href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}
+                    {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">
+                        <span class="glyphicon glyphicon-chevron-left"></span> Предыдущее</a>
+                    {% endif %}
+                    {% if object_list.has_previous %}
+                    <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}
+                    {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">
+                        <span class="glyphicon glyphicon-chevron-left"></span> Предыдущее</a>
+                    {% endif %}
+                </span>
+            </div>
+    </div>
+</div>
+<style>
+
+</style>
+
+<div class="col-lg-6">
+    <h3 align="center">
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h1>{% if object.kanji %}{{ object.kanji }} {% endif %}{% if not object.kanji %} {{ object.kunyomi }} {% endif %}</h1></div>
+            <table class="table">
+
+                {% if object.kanji and object.onyomi and object.kunyomi %}
+                <tr>
+                    <td style="width: 50%;" align="right">Верхнее чтение </td>
+                    <td style="width: 50%;">{{ object.onyomi }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;" align="right">Нижнее чтение </td>
+                    <td>{{ object.kunyomi }}</td>
+                </tr>
+                {% endif %}
+                {% if object.kanji and not object.onyomi and object.kunyomi %}
+                <tr>
+                    <td style="width: 50%;" align="right">Чтение </td>
+                    <td>{{ object.kunyomi }}</td>
+                </tr>
+                {% endif %}
+                <!--{% if object.kanji %}-->
+                <!--<tr>-->
+                    <!--<td style="width: 50%;" align="right">Нижнее чтение </td>-->
+                    <!--<td>{{ object.kunyomi }}</td>-->
+                <!--</tr>-->
+                <!--{% endif %}-->
+                <tr>
+                    <td style="width: 50%;" align="right">Перевод </td>
+                    <td>{{ object.translation }}</td>
+                </tr>
+            </table>
+            </h3>
+</div>
+
+<div class="col-lg-3">
+    <h3 align="center">
+        <div class="pagination">
+            <span class="step-links">
+                {% if object_list.has_next %}
+                <a href="?{{ page_request_var }}={{ object_list.next_page_number }}
+                {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">
+                    Следующее <span class="glyphicon glyphicon-chevron-right"></span></a>
+                {% endif %}
+                {% if not object_list.has_next %}
+                <a href="?{{ page_request_var }}=1
+                {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">
+                    Следующее <span class="glyphicon glyphicon-chevron-right"></span></a>
+                {% endif %}
+            </span>
+        </div>
+</div>
+
+{% endfor %}
+
+    <!--<div class="column" align="center">-->
+        <!--<div class="col-lg-3 col-sm-offset-2">-->
+        <!--</div>-->
+         <div class='col-lg-6 col-sm-offset-3'>
+
+  <form action="{{ previous_unique.get_absolute_url }}">
+        <input type="submit" class="btn btn-warning btn-lg btn-block" value="Вернуться к теме {{ previous_unique.theme_title }}">
+
+            </input></form>
+        </div>
+         <!--<div class="col-lg-3">-->
+
+        <!--</div>-->
+    <!--</div>-->
+
+
+{% endblock content %}

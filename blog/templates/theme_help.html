@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block post_detail_link %}
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Выбрать раздел<span class="caret"></span></a>
+<ul class="dropdown-menu">
+    {% for object in main %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title}}</a></li>
+    <li role="separator" class="divider"></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+
+
+{% block functions_link %}
+{% if request.user.is_authenticated and request.user.is_superuser %}
+<li><a href="">Редактировать справку</a></li>
+<li><a href="">Удалить справку</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+{% block user_stat_link %}
+{% if request.user.is_authenticated and not request.user.is_superuser %}
+<li><a href='{% url "blog:profile" %}'>Профиль / Статистика</a></li>
+<li><a href='{% url "logout" %}'>Выйти</a></li>
+{% endif %}
+{% endblock %}
+
+
+
+
+{% block content %}
+<div align="left"><h1>{% if instance.image %}<img src='{{ instance.image.url }}'
+        border="0" heght="100" width="100">{% endif %} {{ title }}</h1></div>
+
+
+
+    </h1>
+</br>
+
+<div class="column"><div class="col-sm-3">
+{% if request.user.is_authenticated and not request.user.is_superuser%}
+    <form action="{{ previous.get_view_url }}">
+        <input type="submit" class="btn btn-default btn-lg btn-block" value="Просмотреть тему">
+
+            </input></form>
+
+        <!--<button type="button" class="btn btn-default btn-lg btn-block">-->
+            <!--Просмотреть задания</button>-->
+        <button type="button" class="btn btn-success btn-lg btn-block">
+            Начать тестирование</button>
+<!--</div>-->
+<!--</div>-->
+{% endif %}
+<!--</br>-->
+<!--<div class="column">-->
+    <!--<div class="col-sm-3">--></br>
+        <form action="{{ previous.get_absolute_url }}">
+        <input type="submit" class="btn btn-warning btn-lg btn-block" value="Вернуться к теме {{ previous.theme_title }}">
+
+            </input></form>
+        </br>{% if not request.user.is_authenticated %}
+Чтобы перейти к обучению, <a href='{% url "login" %}'>войдите</a> или <a href='{% url "register" %}'>зарегистрируйтесь</a>
+{% endif %}</div>
+</div>
+
+
+
+
+
+
+
+    <div align="center" class="column">
+        <div class="col-sm-9">
+{% for object in images %}
+            <h3>{{ object.title }}</h3>
+        <img src='{{ object.image.url }}' class='img-responsive'/>
+      {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock content %}

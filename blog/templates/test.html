@@ -1,0 +1,493 @@
+{% extends "base_res.html" %}
+{% load urlify %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ instance.theme_title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content %}
+</br>
+
+<div align="left">
+    <h1>Тест по теме {{ instance.theme_title }}</h1>
+</div>
+
+<!--{{ a.9 }}-->
+<!--<table class="table">-->
+<!--<tr>-->
+<!--{% for tag in tags %}-->
+<!--<a href='{{ tag.get_absolute_url }}' class="list-group-item">-->
+<!--{{ tag.theme_title }}-->
+<!--{% if object.extra_title %}. {{ object.extra_title }}{% endif %}</a>-->
+<!--{% endfor %}-->
+<!--</tr>-->
+<!--</table>-->
+
+
+{% if task %}
+<div align="right">
+    <a href="{{ instance.get_absolute_url }}" class="btn btn-success" role="button">Вернуться к теме</a>
+</div>
+{% endif %}
+
+{% if not task %}
+По этой теме пока нет тестов.</br></br>
+<div class='col-lg-6 col-sm-offset-3'>
+
+    <form action="{{ instance.get_absolute_url }}">
+        <input type="submit" class="btn btn-success btn-lg btn-block"
+               value="Вернуться к теме {{ previous_unique.theme_title }}">
+
+        </input></form>
+</div>
+
+{% endif %}
+{% if task %}
+<div class="container">
+    <div class="row">
+        <section>
+            <div class="wizard">
+                <div class="wizard-inner">
+                    <div class="connecting-line"></div>
+                    <ul class="nav nav-tabs" role="tablist">
+
+                        <li role="presentation" class="active">
+                            <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab">
+                                <span class="round-tab"> 1 </span>
+                            </a>
+                        </li>
+
+                        <li role="presentation" class="disabled">
+                            <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab">
+                                <span class="round-tab"> 2 </span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab">
+                                <span class="round-tab"> 3 </span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#step4" data-toggle="tab" aria-controls="step1" role="tab">
+                                <span class="round-tab"> 4 </span>
+                            </a>
+                        </li>
+
+                        <li role="presentation" class="disabled">
+                            <a href="#step5" data-toggle="tab" aria-controls="step2" role="tab">
+                                <span class="round-tab"> 5 </span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#step6" data-toggle="tab" aria-controls="step3" role="tab">
+                                <span class="round-tab"> 6 </span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#step7" data-toggle="tab" aria-controls="step1" role="tab">
+                                <span class="round-tab"> 7 </span>
+                            </a>
+                        </li>
+
+                        <li role="presentation" class="disabled">
+                            <a href="#step8" data-toggle="tab" aria-controls="step2" role="tab">
+                                <span class="round-tab"> 8 </span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#step9" data-toggle="tab" aria-controls="step3" role="tab">
+                                <span class="round-tab"> 9 </span>
+                            </a>
+                        </li>
+                        <li role="presentation" class="disabled">
+                            <a href="#step10" data-toggle="tab" aria-controls="step3" role="tab">
+                                <span class="round-tab"> 10 </span>
+                            </a>
+                        </li>
+
+                        <li role="presentation" class="disabled">
+                            <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab">
+                            <span class="round-tab">
+                                <i class="glyphicon glyphicon-ok"></i>
+                            </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <form role="form">
+                    <div class="tab-content">
+                        <div class="tab-pane active" role="tabpanel" id="step1">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 1: {{ task.0.text }}</h3>
+                                <hr>
+                                {% if task.0.image %}
+                                <img src='{{ task.0.image.url }}' class='img-responsive'/></a>
+                                {% endif %}
+                                <!--{% for answer in a1 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.0 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                                <ul>
+                                    {% for choice in form.choice_text.field.choices %}
+                                    <li>
+                                        <input type="radio" name="choice_text" value="{{choice.0}}"
+                                               {% ifequal form.choice_text.data choice.0 %}
+                                               checked="checked"
+                                               {% endifequal %}/>
+                                        <label for="">{{choice.1}}</label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+
+
+                            </div>
+
+
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step2">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 2: {{ task.1.text }}</h3>
+                                <hr>
+                                {% if task.1.image %}
+                                <img src='{{ task.1.image.url }}' class='img-responsive'/></a>
+                                {% endif %}
+                                <!--{% for answer in a2 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.1 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step3">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 3: {{ task.2.text }}</h3>
+                                <hr>
+                                {% if task.2.image %}
+                                <img src='{{ task.2.image.url }}' class='img-responsive'/></a>
+                                {% endif %}
+                                <!--{% for answer in a3 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.2 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step4">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 4: {{ task.3.text }}</h3>
+                                <hr>
+                                {% if task.3.image %}
+                                <img src='{{ task.3.image.url }}' class='img-responsive'></a>
+                                {% endif %}
+                                <!--{% for answer in a4 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.3 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step5">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 5: {{ task.4.text }}</h3>
+                                <hr>
+                                {% if task.4.image %}
+                                <img src='{{ task.4.image.url }}' class='img-responsive'></a>
+                                {% endif %}
+                                <!--{% for answer in a5 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.4 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step6">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 6: {{ task.5.text }}</h3>
+                                <hr>
+                                {% if task.5.image %}
+                                <img src='{{ task.5.image.url }}' class='img-responsive'></a>
+                                {% endif %}
+                                <!--{% for answer in a6 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.5 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step7">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 7: {{ task.6.text }}</h3>
+                                <hr>
+                                {% if task.6.image %}
+                                <img src='{{ task.6.image.url }}' class='img-responsive'></a>
+                                {% endif %}
+                                <!--{% for answer in a7 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.6 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step8">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 8: {{ task.7.text }}</h3>
+                                <hr>
+                                {% if task.7.image %}
+                                <img src='{{ task.7.image.url }}' class='img-responsive'></a>
+                                {% endif %}
+                                <!--{% for answer in a8 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.7 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step9">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 9: {{ task.8.text }}</h3>
+                                <hr>
+                                {% if task.8.image %}
+                                <img src='{{ task.8.image.url }}' class='img-responsive'></a>
+                                {% endif %}
+                                <!--{% for answer in a9 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.8 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Следующий вопрос</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step10">
+                            <div class="step33">
+                                <hr>
+                                <h3>Вопрос 10: {{ task.9.text }}</h3>
+                                <hr>
+                                {% if task.9.image %}
+                                <img src='{{ task.9.image.url }}' class='img-responsive'></a>
+                                {% endif %}
+                                <!--{% for answer in a10 %}-->
+                                <!--</br>{{ answer.choice_text }}-->
+                                <!--{% endfor %}-->
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for choice in a.9 %}
+
+
+                                    <input type="radio" name="choice" id="choice{{ forloop.counter }}"
+                                           value="{{ choice.id }}"/>
+                                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+                                    {% endfor %}
+                                    <!--<input type="submit" value="Выбрать"/>-->
+                                </form>
+                            </div>
+
+                            <ul class="list-inline pull-right">
+                                <li>
+                                    <button type="button" class="btn btn-primary next-step">Далее</button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!--Results-->
+                        <div class="tab-pane" role="tabpanel" id="complete">
+                            <div class="step44">
+                                <h2>У вас {{ tasks }} из 10 верных ответов</h2>
+
+                                <div class="column">
+                                    <div class="col-sm-6">
+                                        <a href="{{ instance.get_test_url }}" class="btn btn-success" role="button">Пройти
+                                            тест снова</a>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="panel panel-success">
+                                            <div align="center" class="panel-heading">Вы также можете ознакомиться с похожими темами</div>
+
+
+                                            <table align="center" class="table">
+                                                <tr align="center">
+                                                    {% for tag in tags %}
+                                                    <a href='{{ object.get_absolute_url }}' class="list-group-item">
+                                                        {{ tag.theme_title }}
+                                                        </a>
+                                                    {% endfor %}
+                                                </tr>
+                                            </table>
+                                        </div>
+
+
+                                        <!--Вы также можете ознакомиться с похожими темами:-->
+                                        <!--</br>-->
+                                        <!--<table class="table">-->
+                                            <!--<tr>-->
+                                                <!--{% for tag in tags %}-->
+                                                <!--<a href='{{ tag.get_absolute_url }}' class="list-group-item">-->
+                                                    <!--{{ tag.theme_title }}-->
+                                                    <!--{% if object.extra_title %}. {{ object.extra_title }}{% endif %}</a>-->
+                                                <!--{% endfor %}-->
+                                            <!--</tr>-->
+                                        <!--</table>-->
+                                    </div>
+
+                                </div>
+
+                                <!--<ul class="list-inline pull-right">-->
+                                <!--<li><a href="{{ instance.get_test_url }}" class="btn btn-success" role="button">Пройти-->
+                                <!--тест снова</a>-->
+                                <!--</li>-->
+                                <!--</ul>-->
+
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endif %}
+
+
+{% endblock content %}
