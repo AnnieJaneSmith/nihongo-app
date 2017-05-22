@@ -80,35 +80,37 @@ def unit_detail(request, slug=None):
 
 def theme_detail(request, slug=None):
     instance = get_object_or_404(Theme, slug=slug)
-    tasks = Task.objects.filter(
-        tagtask__tag__id=instance.id,
-        usertask__user=request.user).annotate(
-        percent=(
-            F('usertask__count_true') / F('usertask__count_all'))
-    ).values_list(
-        'percent', flat=True
-    )
-    percent = list(tasks)
-    if percent == None:
-        percent = [0]
-    if percent == [None]:
-        percent = [0]
-    ca = len(percent)
-    c_m_05 = 0
-    c_l_05 = 0
-    for i in range(ca):
-        if percent[i] >= 0.5:
-            c_m_05 += 1
-        else:
-            c_l_05 += 1
-    ca = Task.objects.filter(
-        tagtask__tag__id=instance.id)
-    ca = len(ca)
     progress_percent = 0
-    if (ca == 0):
-        progress_percent = 0
-    else:
-        progress_percent = round(((c_m_05 / ca) + (c_l_05 / (2 * ca))) * 100, 1)
+    if request.user.is_staff:
+        tasks = Task.objects.filter(
+            tagtask__tag__id=instance.id,
+            usertask__user=request.user).annotate(
+            percent=(
+                F('usertask__count_true') / F('usertask__count_all'))
+        ).values_list(
+            'percent', flat=True
+        )
+        percent = list(tasks)
+        if percent == None:
+            percent = [0]
+        if percent == [None]:
+            percent = [0]
+        ca = len(percent)
+        c_m_05 = 0
+        c_l_05 = 0
+        for i in range(ca):
+            if percent[i] >= 0.5:
+                c_m_05 += 1
+            else:
+                c_l_05 += 1
+        ca = Task.objects.filter(
+            tagtask__tag__id=instance.id)
+        ca = len(ca)
+        # progress_percent = 0
+        if (ca == 0):
+            progress_percent = 0
+        else:
+            progress_percent = round(((c_m_05 / ca) + (c_l_05 / (2 * ca))) * 100, 1)
 
     help_object = Help.objects.filter(theme__id=instance.id)
     previous = Unit.objects.filter(type__id=instance.unit_id)
@@ -334,15 +336,47 @@ def test(request, slug=None):
     ).filter(percent__gte=0.9, usertask__prev_date__gte=three_days_ago)
     task = list(chain(task, tasks))
 
-    a = []
+    # a = []
+    a1 = []
+    a2 = []
+    a3 = []
+    a4 = []
+    a5 = []
+    a6 = []
+    a7 = []
+    a8 = []
+    a9 = []
+    a10 = []
+    # a1 = []
+    # a2 = []
+    # a3 = []
+    # a4 = []
+    # a5 = []
+    # a6 = []
+    # a7 = []
+    # a8 = []
+    # a9 = []
+    # a10 = []
     if len(task) >= 10:
         for i in range(0, 10):
-            a.append(Choice.objects.filter(task__id=task[i].id))
+            # a.append(Choice.objects.filter(task__id=task[i].id))
+            a1 = Choice.objects.filter(task__id=task[0].id)
+            a2 = Choice.objects.filter(task__id=task[1].id)
+            a3 = Choice.objects.filter(task__id=task[2].id)
+            a4 = Choice.objects.filter(task__id=task[3].id)
+            a5 = Choice.objects.filter(task__id=task[4].id)
+            a6 = Choice.objects.filter(task__id=task[5].id)
+            a7 = Choice.objects.filter(task__id=task[6].id)
+            a8 = Choice.objects.filter(task__id=task[7].id)
+            a9 = Choice.objects.filter(task__id=task[8].id)
+            a10 = Choice.objects.filter(task__id=task[9].id)
+            # a1 = Choice.objects.filter(task__id=task[0].id)
+
     ids = []
     if len(task) >= 10:
         ids = [task[0].id, task[1].id, task[2].id, task[3].id, task[4].id, task[5].id, task[6].id, task[7].id,
                task[8].id, task[9].id]
-        task = Task.objects.filter(id__in=ids)
+        # task = Task.objects.filter(id__in=ids)
 
     # answs=[a[0].id, a[1].id, a[2].id, a[3].id, a[4].id, a[5].id, a[6].id, a[7].id, a[8].id, a[9].id]
     # ids = [task[0].id, task[1].id, task[2].id, task[3].id, task[4].id, task[5].id, task[6].id, task[7].id, task[8].id, task[9].id]
@@ -418,16 +452,17 @@ def test(request, slug=None):
         "instance": instance,
         "tasks": score,
         "task": task,
-        "a": a,
+        "a1": a1,
         "tags": tags,
-        # "a3": a3,
-        # "a4": a4,
-        # "a5": a5,
-        # "a6": a6,
-        # "a7": a7,
-        # "a8": a8,
-        # "a9": a9,
-        # "a10": a10,
+        "a2": a2,
+        "a3": a3,
+        "a4": a4,
+        "a5": a5,
+        "a6": a6,
+        "a7": a7,
+        "a8": a8,
+        "a9": a9,
+        "a10": a10,
 
     }
     return render(request, "test.html", context)
