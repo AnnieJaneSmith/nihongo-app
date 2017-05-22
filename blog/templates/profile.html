@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block user_stat_link %}
 {% if request.user.is_authenticated and not request.user.is_superuser %}
 <li><a href='#'>Профиль пользователя</a></li>
@@ -9,7 +9,7 @@
 
 
 {% block content %}
-<div align="left"><h3><a href='{% url "blog:list" %}'><img src="http://127.0.0.1:8000/media_cdn/images/logo.png"
+<div align="left"><h3><a href='{% url "blog:list" %}'><img src='{% static "/media_cdn/images/logo.png" %}'
                                                            border="0" heght="100" width="100"></a> Nihongo-App</h1>
 </div>
 
