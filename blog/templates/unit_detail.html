@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load urlify %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block head_title %}
 {{ instance.title }} | {{ block.super }}
@@ -64,7 +65,7 @@
             {% if not object.image and not object.content %}
             <h3 align="center">
                 <a href='{{ object.get_second_url }}'>
-                         <img src="http://127.0.0.1:8000/media_cdn/images/info.png"
+                         <img src="{% static '/media_cdn/images/info.png' %}"
                          border="0" heght="100" width="100"></br>
                     Прочитать справочную <br/>информацию по разделу
                 </a>
